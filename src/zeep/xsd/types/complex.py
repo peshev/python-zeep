@@ -464,6 +464,11 @@ class ComplexType(AnyType):
         )
 
         new._extension_types = base.accepted_types
+        # I have no idea why, but this fixes a problem with zeep adding duplicate child elements within the complexType, 
+        # leading to the XML element parser then overwriting alerady parsed, valid values for the child elements with None values 
+        # (since there's no second element with the same name in the XML to parse). I tried to debug it, and when I placed
+        # a breakpoint on this line, the erroneous behaviour went away. WHAT THE actual FUCK. 
+        len(new.elements) 
         return new
 
     def restrict(self, base):
